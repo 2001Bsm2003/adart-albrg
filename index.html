@@ -1,148 +1,172 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>إدارة البرج</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:#f4f7f8;color:#17212b}
-button,input,select{font:inherit}button{cursor:pointer;border:0}.app{max-width:760px;margin:auto;min-height:100vh;background:#f4f7f8}
-header{background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;padding:28px 20px 22px;border-radius:0 0 24px 24px}
-h1{margin:0;font-size:25px}.sub{opacity:.85;margin-top:6px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 4px 18px #0000000b}.stat b{display:block;font-size:23px;margin-top:5px}.green{color:#15803d}.red{color:#dc2626}.gold{color:#b45309}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 16px}.action{background:#fff;padding:16px;border-radius:16px;text-align:right;box-shadow:0 4px 18px #0000000b}.action strong{display:block;margin-top:6px}
-section{padding:0 16px 22px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:8px 0 10px}h2{font-size:18px;margin:0}
-.list{display:flex;flex-direction:column;gap:10px}.row{background:#fff;border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 3px 14px #00000009}.name{font-weight:700}.meta{font-size:13px;color:#64748b;margin-top:4px}.pill{padding:6px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}.paid{background:#dcfce7;color:#166534}.due{background:#fee2e2;color:#991b1b}
-.primary{background:#0f766e;color:#fff;padding:12px 16px;border-radius:12px;font-weight:700}.secondary{background:#e6f4f1;color:#0f766e;padding:10px 14px;border-radius:12px;font-weight:700}
-.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;z-index:5}.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:760px;margin:auto 0 0;border-radius:24px 24px 0 0;padding:22px;max-height:90vh;overflow:auto}.field{margin:10px 0}.field label{display:block;font-size:13px;color:#475569;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid #dbe3e8;border-radius:12px;background:#fff}.form-actions{display:flex;gap:10px;margin-top:16px}.form-actions>*{flex:1}
-.empty{text-align:center;color:#64748b;padding:25px;background:#fff;border-radius:16px}
-footer{text-align:center;color:#94a3b8;font-size:12px;padding:10px 16px 28px}
-@media(min-width:700px){.app{box-shadow:0 0 35px #0000000c}.modal{align-items:center}.sheet{border-radius:24px;max-width:600px;margin:auto}}
+<style>*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:#f1f5f9;color:#0f172a}button,input,select{font:inherit}button{cursor:pointer;border:0;background:none}.shell{min-height:100vh;display:flex}.sidebar{width:260px;background:#0f172a;color:#e2e8f0;padding:24px 16px;position:fixed;right:0;top:0;bottom:0;z-index:10}.brand{display:flex;gap:12px;align-items:center;padding:8px 10px 28px}.logo{width:42px;height:42px;border-radius:12px;background:#38bdf8;color:#0f172a;display:grid;place-items:center;font-weight:900;font-size:20px}.brand strong{display:block}.brand small{color:#94a3b8}.nav{width:100%;color:#cbd5e1;padding:13px 14px;border-radius:12px;text-align:right;margin:3px 0;display:flex;gap:12px;align-items:center}.nav.active,.nav:hover{background:#1e293b;color:#fff}.side-note{position:absolute;bottom:20px;left:18px;right:18px;color:#64748b;font-size:12px}.main{margin-right:260px;width:calc(100% - 260px)}.topbar{height:82px;background:#fff;border-bottom:1px solid #e2e8f0;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}.topbar h1{margin:3px 0 0;font-size:22px}.muted{color:#64748b;font-size:13px}.menu{display:none}.iconbtn{font-size:20px}.content{padding:28px;max-width:1400px;margin:auto}.grid{display:grid;gap:18px}.stats{grid-template-columns:repeat(3,1fr);margin-bottom:18px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:22px;box-shadow:0 6px 20px rgba(15,23,42,.04)}.stat{min-height:135px}.stat span{color:#64748b;font-size:14px}.stat b{display:block;font-size:27px;margin:12px 0 4px}.stat small{color:#94a3b8}.section-head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}.section-head h2,.settings h2{margin:0 0 5px}.section-head p{margin:0;color:#64748b;font-size:13px}.primary{background:#0f172a;color:#fff;padding:11px 16px;border-radius:10px}.primary:hover{background:#1e293b}.search{margin-bottom:14px}.search input,.form input,.form select,.settings input{width:100%;padding:12px 13px;border:1px solid #cbd5e1;border-radius:10px;outline:none;background:#fff}.search input:focus,.form input:focus,.form select:focus,.settings input:focus{border-color:#38bdf8}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px}th,td{padding:14px 10px;border-bottom:1px solid #e2e8f0;text-align:right;white-space:nowrap}th{color:#64748b;font-size:12px;font-weight:600}.actions{display:flex;gap:12px}.actions button,.dangerText{color:#0369a1}.dangerText{color:#dc2626}.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px}.badge.ok{background:#dcfce7;color:#166534}.badge.off{background:#e2e8f0;color:#475569}.empty{padding:30px;text-align:center;color:#64748b}.message-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.msgcard{border:1px solid #e2e8f0;border-radius:14px;padding:16px;display:flex;justify-content:space-between;gap:12px;align-items:center}.msgcard small{display:block;color:#64748b;margin-top:4px}.msg-actions{display:flex;gap:8px}.msg-actions button{border:1px solid #cbd5e1;padding:8px 11px;border-radius:9px}.settings{max-width:650px}.settings label,.form label{display:block;margin:15px 0;color:#334155;font-size:13px}.settings input,.form input,.form select{margin-top:7px}.settings hr{border:0;border-top:1px solid #e2e8f0;margin:25px 0}.row{display:flex;gap:10px;align-items:center}.row>button,.filebtn{border:1px solid #cbd5e1;border-radius:9px;padding:10px 14px}.filebtn input{display:none}.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:18px;z-index:50}.modalbox{width:min(520px,100%);background:#fff;border-radius:18px;padding:20px}.modalhead{display:flex;justify-content:space-between;align-items:center}.modalhead h2{margin:0}.modalhead button{font-size:28px;color:#64748b}.form .primary{width:100%;margin-top:8px}.check{display:flex!important;align-items:center;gap:8px}.check input{width:auto!important;margin:0!important}.modalbox{max-height:90vh;overflow:auto}@media(max-width:800px){.sidebar{transform:translateX(110%);transition:.2s;width:82%;box-shadow:-10px 0 30px rgba(0,0,0,.2)}.sidebar.open{transform:none}.main{margin-right:0;width:100%}.menu{display:block;font-size:22px}.topbar{padding:0 16px}.content{padding:16px}.stats{grid-template-columns:1fr}.message-grid{grid-template-columns:1fr}.card{padding:17px}.section-head{align-items:flex-start}.section-head .primary{white-space:nowrap}.brand{padding-top:4px}.side-note{display:none}}
 </style>
 </head>
 <body>
-<div class="app">
-<header>
-  <h1>📡 إدارة البرج</h1>
-  <div class="sub">إدارة المشتركين والتسديدات بسهولة</div>
-</header>
+<div id="app"></div>
+<script>const KEY = 'idar-al-burj-data-v1';
 
-<div class="grid">
-  <div class="card stat">👥 المشتركون<b id="total">0</b></div>
-  <div class="card stat">✅ المسددون<b id="paidCount" class="green">0</b></div>
-  <div class="card stat">🔴 المتأخرون<b id="dueCount" class="red">0</b></div>
-  <div class="card stat">💰 دخل الشهر<b id="income" class="gold">0 د.ع</b></div>
-</div>
+const seed = {
+  settings: { towerName: 'إدارة البرج', currency: 'د.ع', adminPin: '1234' },
+  subscribers: [
+    {id: 1, name: 'أحمد محمد', apartment: '101', phone: '07700000001', monthly: 25000, active: true},
+    {id: 2, name: 'علي حسن', apartment: '102', phone: '07700000002', monthly: 25000, active: true},
+    {id: 3, name: 'محمد كريم', apartment: '201', phone: '07700000003', monthly: 30000, active: true}
+  ],
+  payments: [
+    {id: 1, subscriberId: 1, amount: 25000, date: '2026-11-01', month: '2026-11', note: 'تسديد شهري'},
+    {id: 2, subscriberId: 2, amount: 25000, date: '2026-11-02', month: '2026-11', note: 'تسديد شهري'}
+  ]
+};
 
-<div class="actions">
-  <button class="action" onclick="openAdd()">➕<strong>إضافة مشترك</strong></button>
-  <button class="action" onclick="showDue()">🔴<strong>المتأخرون</strong></button>
-  <button class="action" onclick="showAll()">👥<strong>كل المشتركين</strong></button>
-  <button class="action" onclick="sendReminder()">📨<strong>تذكير بالاستحقاق</strong></button>
-</div>
+let state = load();
+let currentPage = 'dashboard';
 
-<section>
- <div class="section-title"><h2 id="listTitle">استحقاق اليوم</h2><button class="secondary" onclick="showAll()">عرض الكل</button></div>
- <div id="list" class="list"></div>
-</section>
-
-<footer>البيانات محفوظة على هذا الجهاز داخل المتصفح.</footer>
-</div>
-
-<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
-<div class="sheet">
-<h2 id="modalTitle">إضافة مشترك</h2>
-<form id="form" onsubmit="saveCustomer(event)">
-<input type="hidden" id="editId">
-<div class="field"><label>اسم المشترك</label><input id="name" required placeholder="مثال: أحمد محمد"></div>
-<div class="field"><label>رقم الهاتف</label><input id="phone" required inputmode="tel" placeholder="07XXXXXXXXX"></div>
-<div class="field"><label>رقم الاشتراك</label><input id="subno" required placeholder="1025"></div>
-<div class="field"><label>الباقة</label><input id="plan" placeholder="10 ميغا"></div>
-<div class="field"><label>قيمة الاشتراك (د.ع)</label><input id="amount" type="number" required min="0" placeholder="25000"></div>
-<div class="field"><label>تاريخ الاستحقاق</label><input id="due" type="date" required></div>
-<div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">إلغاء</button><button class="primary">حفظ المشترك</button></div>
-</form>
-</div>
-</div>
-
-<div id="payModal" class="modal" onclick="if(event.target===this)closePay()">
-<div class="sheet">
-<h2>تسجيل التسديد</h2>
-<p id="payInfo"></p>
-<div class="field"><label>المبلغ</label><input id="payAmount" type="number"></div>
-<div class="form-actions"><button type="button" class="secondary" onclick="closePay()">إلغاء</button><button class="primary" onclick="confirmPay()">✅ تأكيد التسديد</button></div>
-</div>
-</div>
-
-<script>
-const KEY="idar-al-burj-v1";
-let customers=JSON.parse(localStorage.getItem(KEY)||"[]");
-let payId=null;
-
-function save(){localStorage.setItem(KEY,JSON.stringify(customers));render()}
-function money(n){return Number(n||0).toLocaleString("ar-IQ")+" د.ع"}
-function today(){return new Date().toISOString().slice(0,10)}
-function status(c){return c.paidUntil && c.paidUntil>=today()}
-function render(list=customers,title="استحقاق اليوم"){
- document.getElementById("total").textContent=customers.length;
- document.getElementById("paidCount").textContent=customers.filter(status).length;
- document.getElementById("dueCount").textContent=customers.filter(c=>!status(c)).length;
- const month=new Date().toISOString().slice(0,7);
- const income=customers.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.date.slice(0,7)===month).reduce((x,p)=>x+Number(p.amount),0),0);
- document.getElementById("income").textContent=money(income);
- document.getElementById("listTitle").textContent=title;
- const el=document.getElementById("list");
- if(!list.length){el.innerHTML='<div class="empty">لا توجد بيانات حاليًا.</div>';return}
- el.innerHTML=list.map(c=>`
- <div class="row">
-   <div onclick="openCustomer('${c.id}')" style="flex:1">
-    <div class="name">${esc(c.name)}</div>
-    <div class="meta">${esc(c.phone)} • اشتراك ${esc(c.subno)} • ${money(c.amount)}</div>
-    <div class="meta">الاستحقاق: ${c.due||"غير محدد"}</div>
-   </div>
-   <div><span class="pill ${status(c)?"paid":"due"}">${status(c)?"مسدد":"متأخر"}</span></div>
- </div>`).join("");
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || structuredClone(seed); }
+  catch { return structuredClone(seed); }
 }
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function openAdd(){
- document.getElementById("form").reset();document.getElementById("editId").value="";
- document.getElementById("due").value=today();document.getElementById("modalTitle").textContent="إضافة مشترك";
- document.getElementById("modal").classList.add("open");
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+function money(n) { return new Intl.NumberFormat('ar-IQ').format(Number(n||0)) + ' ' + state.settings.currency; }
+function today() { return new Date().toISOString().slice(0,10); }
+function uid() { return Date.now() + Math.floor(Math.random()*1000); }
+function escapeHtml(s='') { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+
+function app() {
+  document.querySelector('#app').innerHTML = `
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">ب</div><div><strong>${escapeHtml(state.settings.towerName)}</strong><small>نظام الإدارة</small></div></div>
+      <nav>
+        ${nav('dashboard','لوحة التحكم','⌂')}
+        ${nav('subscribers','المشتركون','👥')}
+        ${nav('payments','التسديدات','💳')}
+        ${nav('messages','الرسائل','✉️')}
+        ${nav('settings','الإعدادات','⚙️')}
+      </nav>
+      <div class="side-note">البيانات محفوظة على هذا الجهاز</div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <button class="menu" onclick="toggleSide()">☰</button>
+        <div><span class="muted">مرحباً بك</span><h1>${pageTitle()}</h1></div>
+        <button class="iconbtn" onclick="exportData()" title="نسخة احتياطية">⬇️</button>
+      </header>
+      <section class="content">${pageContent()}</section>
+    </main>
+  </div>`;
+  bind();
 }
-function openCustomer(id){
- const c=customers.find(x=>x.id===id); if(!c)return;
- const payments=(c.payments||[]).slice().reverse().map(p=>`${p.date} — ${money(p.amount)}`).join("\n")||"لا توجد دفعات";
- const ok=confirm(`${c.name}\nالهاتف: ${c.phone}\nالحالة: ${status(c)?"مسدد حتى "+c.paidUntil:"متأخر"}\n\nسجل التسديد:\n${payments}\n\nاضغط موافق لتسجيل تسديد، أو إلغاء للتعديل.`);
- if(ok){payId=id;document.getElementById("payAmount").value=c.amount;document.getElementById("payInfo").textContent=`المشترك: ${c.name} — ${c.phone}`;document.getElementById("payModal").classList.add("open")}
- else {editCustomer(c)}
+function nav(id,label,icon){ return `<button class="nav ${currentPage===id?'active':''}" data-page="${id}"><span>${icon}</span>${label}</button>`; }
+function pageTitle(){ return ({dashboard:'لوحة التحكم',subscribers:'المشتركون',payments:'التسديدات',messages:'الرسائل',settings:'الإعدادات'})[currentPage]; }
+
+function pageContent(){
+  if(currentPage==='dashboard') return dashboard();
+  if(currentPage==='subscribers') return subscribers();
+  if(currentPage==='payments') return payments();
+  if(currentPage==='messages') return messages();
+  return settings();
 }
-function editCustomer(c){
- document.getElementById("editId").value=c.id;name.value=c.name;phone.value=c.phone;subno.value=c.subno;plan.value=c.plan||"";amount.value=c.amount;due.value=c.due||today();
- document.getElementById("modalTitle").textContent="تعديل المشترك";document.getElementById("modal").classList.add("open");
+function dashboard(){
+  const total=state.subscribers.filter(x=>x.active).length;
+  const paid=state.payments.filter(x=>x.month===new Date().toISOString().slice(0,7));
+  const collected=paid.reduce((s,p)=>s+p.amount,0);
+  const expected=state.subscribers.filter(x=>x.active).reduce((s,x)=>s+x.monthly,0);
+  const due=Math.max(expected-collected,0);
+  const recent=[...state.payments].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  return `<div class="grid stats">
+    <div class="card stat"><span>المشتركون الفعالون</span><b>${total}</b><small>مشترك</small></div>
+    <div class="card stat"><span>تسديدات هذا الشهر</span><b>${money(collected)}</b><small>المحصّل</small></div>
+    <div class="card stat"><span>المتبقي المتوقع</span><b>${money(due)}</b><small>لشهر ${new Date().toLocaleDateString('ar-IQ',{month:'long'})}</small></div>
+  </div>
+  <div class="card">
+    <div class="section-head"><div><h2>آخر التسديدات</h2><p>آخر العمليات المسجلة</p></div><button class="primary" data-page="payments">عرض الكل</button></div>
+    ${paymentTable(recent)}
+  </div>`;
 }
-function saveCustomer(e){
- e.preventDefault(); const id=document.getElementById("editId").value;
- const data={name:name.value.trim(),phone:phone.value.trim(),subno:subno.value.trim(),plan:plan.value.trim(),amount:Number(amount.value),due:due.value};
- if(id){Object.assign(customers.find(c=>c.id===id),data)} else {customers.push({...data,id:crypto.randomUUID(),payments:[],paidUntil:""})}
- save();closeModal();
+function subscribers(){
+  return `<div class="card">
+    <div class="section-head"><div><h2>المشتركون</h2><p>إضافة وتعديل وحذف بيانات المشتركين</p></div><button class="primary" id="addSub">+ إضافة مشترك</button></div>
+    <div class="search"><input id="subSearch" placeholder="بحث بالاسم أو الشقة أو الهاتف"></div>
+    <div id="subTable">${subscriberTable(state.subscribers)}</div>
+  </div>`;
 }
-function confirmPay(){
- const c=customers.find(x=>x.id===payId);if(!c)return;
- const amt=Number(document.getElementById("payAmount").value||c.amount);
- const d=new Date();d.setMonth(d.getMonth()+1);
- c.paidUntil=d.toISOString().slice(0,10);
- c.due=c.paidUntil;
- c.payments=c.payments||[];c.payments.push({date:today(),amount:amt});
- save();closePay();
- alert(`تم تسجيل التسديد بنجاح.\n\nتم تجهيز رسالة التأكيد للمشترك ${c.name}.\n\nتم التسديد: ${money(amt)}\nفعال حتى: ${c.paidUntil}`);
+function subscriberTable(arr){
+  return `<div class="tablewrap"><table><thead><tr><th>الاسم</th><th>الشقة</th><th>الهاتف</th><th>الاشتراك</th><th>الحالة</th><th></th></tr></thead><tbody>
+  ${arr.map(s=>`<tr><td><strong>${escapeHtml(s.name)}</strong></td><td>${escapeHtml(s.apartment)}</td><td>${escapeHtml(s.phone)}</td><td>${money(s.monthly)}</td><td><span class="badge ${s.active?'ok':'off'}">${s.active?'فعال':'متوقف'}</span></td><td class="actions"><button data-edit="${s.id}">تعديل</button><button class="dangerText" data-del="${s.id}">حذف</button></td></tr>`).join('')}
+  </tbody></table></div>`;
 }
-function closeModal(){document.getElementById("modal").classList.remove("open")}
-function closePay(){document.getElementById("payModal").classList.remove("open")}
-function showDue(){render(customers.filter(c=>!status(c)),"المتأخرون")}
-function showAll(){render(customers,"كل المشتركين")}
-function sendReminder(){const due=customers.filter(c=>!status(c));alert(due.length?`لديك ${due.length} مشترك/مشتركين متأخرين عن التسديد.`:"لا يوجد متأخرون حاليًا.")}
-render();
-</script>
+function payments(){
+  return `<div class="card">
+    <div class="section-head"><div><h2>التسديدات</h2><p>تسجيل الدفعات ومراجعة السجل</p></div><button class="primary" id="addPay">+ تسجيل تسديد</button></div>
+    ${paymentTable([...state.payments].sort((a,b)=>b.date.localeCompare(a.date)))}
+  </div>`;
+}
+function paymentTable(arr){
+  if(!arr.length) return '<div class="empty">لا توجد تسديدات بعد.</div>';
+  return `<div class="tablewrap"><table><thead><tr><th>المشترك</th><th>الشهر</th><th>المبلغ</th><th>التاريخ</th><th>ملاحظة</th><th></th></tr></thead><tbody>
+  ${arr.map(p=>{const s=state.subscribers.find(x=>x.id===p.subscriberId); return `<tr><td>${escapeHtml(s?.name||'غير معروف')}</td><td>${escapeHtml(p.month)}</td><td><strong>${money(p.amount)}</strong></td><td>${escapeHtml(p.date)}</td><td>${escapeHtml(p.note||'')}</td><td><button class="dangerText" data-paydel="${p.id}">حذف</button></td></tr>`}).join('')}
+  </tbody></table></div>`;
+}
+function messages(){
+  return `<div class="card"><div class="section-head"><div><h2>رسائل التسديد</h2><p>إرسال رسالة جاهزة عبر واتساب أو SMS بعد تسجيل التسديد.</p></div></div>
+  <div class="message-grid">${state.subscribers.map(s=>`<div class="msgcard"><div><strong>${escapeHtml(s.name)}</strong><small>شقة ${escapeHtml(s.apartment)} · ${escapeHtml(s.phone)}</small></div>
+  <div class="msg-actions"><button onclick="sendWhatsApp(${s.id})">واتساب</button><button onclick="sendSMS(${s.id})">SMS</button></div></div>`).join('')}</div></div>`;
+}
+function settings(){
+  return `<div class="card settings"><h2>الإعدادات</h2>
+    <label>اسم البرج<input id="towerName" value="${escapeHtml(state.settings.towerName)}"></label>
+    <label>العملة<input id="currency" value="${escapeHtml(state.settings.currency)}"></label>
+    <label>رمز المدير المحلي<input id="pin" inputmode="numeric" value="${escapeHtml(state.settings.adminPin)}"></label>
+    <button class="primary" id="saveSettings">حفظ الإعدادات</button>
+    <hr><h3>النسخ الاحتياطي</h3><p class="muted">يمكنك تصدير البيانات واستعادتها على نفس التطبيق.</p>
+    <div class="row"><button id="exportBtn">تصدير JSON</button><label class="filebtn">استيراد JSON<input type="file" id="importFile" accept=".json,application/json"></label></div>
+  </div>`;
+}
+
+function bind(){
+  document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{currentPage=b.dataset.page; app();});
+  const addSub=document.querySelector('#addSub'); if(addSub) addSub.onclick=()=>showSubForm();
+  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>showSubForm(Number(b.dataset.edit)));
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('حذف المشترك؟')){state.subscribers=state.subscribers.filter(s=>s.id!==Number(b.dataset.del));save();app();}});
+  document.querySelectorAll('[data-paydel]').forEach(b=>b.onclick=()=>{if(confirm('حذف التسديد؟')){state.payments=state.payments.filter(p=>p.id!==Number(b.dataset.paydel));save();app();}});
+  const addPay=document.querySelector('#addPay'); if(addPay) addPay.onclick=()=>showPayForm();
+  const search=document.querySelector('#subSearch'); if(search) search.oninput=()=>{const q=search.value.toLowerCase(); document.querySelector('#subTable').innerHTML=subscriberTable(state.subscribers.filter(s=>(s.name+s.apartment+s.phone).toLowerCase().includes(q))); bind();};
+  const saveSet=document.querySelector('#saveSettings'); if(saveSet) saveSet.onclick=()=>{state.settings.towerName=document.querySelector('#towerName').value.trim()||'إدارة البرج';state.settings.currency=document.querySelector('#currency').value.trim()||'د.ع';state.settings.adminPin=document.querySelector('#pin').value.trim()||'1234';save();app();};
+  const ex=document.querySelector('#exportBtn'); if(ex) ex.onclick=exportData;
+  const imp=document.querySelector('#importFile'); if(imp) imp.onchange=importData;
+}
+function modal(title,body){
+  const d=document.createElement('div'); d.className='modal'; d.innerHTML=`<div class="modalbox"><div class="modalhead"><h2>${title}</h2><button onclick="this.closest('.modal').remove()">×</button></div>${body}</div>`;document.body.appendChild(d);
+}
+function showSubForm(id){
+  const s=id?state.subscribers.find(x=>x.id===id):{name:'',apartment:'',phone:'',monthly:25000,active:true};
+  modal(id?'تعديل مشترك':'إضافة مشترك',`<form id="subForm" class="form"><label>الاسم<input name="name" required value="${escapeHtml(s.name)}"></label><label>رقم الشقة<input name="apartment" required value="${escapeHtml(s.apartment)}"></label><label>رقم الهاتف<input name="phone" required value="${escapeHtml(s.phone)}"></label><label>الاشتراك الشهري<input name="monthly" type="number" required value="${s.monthly}"></label><label class="check"><input name="active" type="checkbox" ${s.active?'checked':''}> مشترك فعال</label><button class="primary">حفظ</button></form>`);
+  document.querySelector('#subForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);const item={id:id||uid(),name:f.get('name').trim(),apartment:f.get('apartment').trim(),phone:f.get('phone').trim(),monthly:Number(f.get('monthly')),active:f.get('active')==='on'};if(id)state.subscribers=state.subscribers.map(x=>x.id===id?item:x);else state.subscribers.push(item);save();document.querySelector('.modal').remove();app();};
+}
+function showPayForm(){
+  modal('تسجيل تسديد',`<form id="payForm" class="form"><label>المشترك<select name="subscriberId">${state.subscribers.map(s=>`<option value="${s.id}">${escapeHtml(s.name)} — شقة ${escapeHtml(s.apartment)}</option>`).join('')}</select></label><label>المبلغ<input name="amount" type="number" required></label><label>الشهر<input name="month" type="month" value="${new Date().toISOString().slice(0,7)}" required></label><label>التاريخ<input name="date" type="date" value="${today()}" required></label><label>ملاحظة<input name="note" value="تسديد شهري"></label><button class="primary">حفظ التسديد</button></form>`);
+  const s=state.subscribers[0]; if(s) document.querySelector('#payForm [name=amount]').value=s.monthly;
+  document.querySelector('#payForm [name=subscriberId]').onchange=e=>{const s=state.subscribers.find(x=>x.id===Number(e.target.value));document.querySelector('#payForm [name=amount]').value=s?.monthly||0;};
+  document.querySelector('#payForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);state.payments.push({id:uid(),subscriberId:Number(f.get('subscriberId')),amount:Number(f.get('amount')),month:f.get('month'),date:f.get('date'),note:f.get('note')});save();document.querySelector('.modal').remove();app();};
+}
+function messageText(id){
+  const s=state.subscribers.find(x=>x.id===id); return `السلام عليكم ${s?.name||''}، تم تسجيل تسديد الاشتراك الشهري في ${state.settings.towerName}. شكراً لكم.`;
+}
+window.sendWhatsApp=id=>{const s=state.subscribers.find(x=>x.id===id); const phone=(s?.phone||'').replace(/\D/g,''); if(!phone)return; location.href=`https://wa.me/${phone}?text=${encodeURIComponent(messageText(id))}`;};
+window.sendSMS=id=>{const s=state.subscribers.find(x=>x.id===id); if(!s)return; location.href=`sms:${s.phone}?body=${encodeURIComponent(messageText(id))}`;};
+window.toggleSide=()=>document.querySelector('.sidebar')?.classList.toggle('open');
+window.exportData=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='idar-al-burj-backup.json';a.click();URL.revokeObjectURL(a.href);};
+window.importData=e=>{const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);save();app();alert('تم استيراد البيانات');}catch{alert('الملف غير صالح')}};r.readAsText(file);};
+
+app();</script>
 </body>
 </html>
