@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>إدارة البرج</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:#f4f7f8;color:#17212b}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.app{max-width:760px;margin:auto;min-height:100vh;background:#f4f7f8}
+header{background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;padding:28px 20px 22px;border-radius:0 0 24px 24px}
+h1{margin:0;font-size:25px}.sub{opacity:.85;margin-top:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 4px 18px #0000000b}.stat b{display:block;font-size:23px;margin-top:5px}.green{color:#15803d}.red{color:#dc2626}.gold{color:#b45309}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 16px}.action{background:#fff;padding:16px;border-radius:16px;text-align:right;box-shadow:0 4px 18px #0000000b}.action strong{display:block;margin-top:6px}
+section{padding:0 16px 22px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:8px 0 10px}h2{font-size:18px;margin:0}
+.list{display:flex;flex-direction:column;gap:10px}.row{background:#fff;border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 3px 14px #00000009}.name{font-weight:700}.meta{font-size:13px;color:#64748b;margin-top:4px}.pill{padding:6px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}.paid{background:#dcfce7;color:#166534}.due{background:#fee2e2;color:#991b1b}
+.primary{background:#0f766e;color:#fff;padding:12px 16px;border-radius:12px;font-weight:700}.secondary{background:#e6f4f1;color:#0f766e;padding:10px 14px;border-radius:12px;font-weight:700}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;z-index:5}.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:760px;margin:auto 0 0;border-radius:24px 24px 0 0;padding:22px;max-height:90vh;overflow:auto}.field{margin:10px 0}.field label{display:block;font-size:13px;color:#475569;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid #dbe3e8;border-radius:12px;background:#fff}.form-actions{display:flex;gap:10px;margin-top:16px}.form-actions>*{flex:1}
+.empty{text-align:center;color:#64748b;padding:25px;background:#fff;border-radius:16px}
+footer{text-align:center;color:#94a3b8;font-size:12px;padding:10px 16px 28px}
+@media(min-width:700px){.app{box-shadow:0 0 35px #0000000c}.modal{align-items:center}.sheet{border-radius:24px;max-width:600px;margin:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>📡 إدارة البرج</h1>
+  <div class="sub">إدارة المشتركين والتسديدات بسهولة</div>
+</header>
+
+<div class="grid">
+  <div class="card stat">👥 المشتركون<b id="total">0</b></div>
+  <div class="card stat">✅ المسددون<b id="paidCount" class="green">0</b></div>
+  <div class="card stat">🔴 المتأخرون<b id="dueCount" class="red">0</b></div>
+  <div class="card stat">💰 دخل الشهر<b id="income" class="gold">0 د.ع</b></div>
+</div>
+
+<div class="actions">
+  <button class="action" onclick="openAdd()">➕<strong>إضافة مشترك</strong></button>
+  <button class="action" onclick="showDue()">🔴<strong>المتأخرون</strong></button>
+  <button class="action" onclick="showAll()">👥<strong>كل المشتركين</strong></button>
+  <button class="action" onclick="sendReminder()">📨<strong>تذكير بالاستحقاق</strong></button>
+</div>
+
+<section>
+ <div class="section-title"><h2 id="listTitle">استحقاق اليوم</h2><button class="secondary" onclick="showAll()">عرض الكل</button></div>
+ <div id="list" class="list"></div>
+</section>
+
+<footer>البيانات محفوظة على هذا الجهاز داخل المتصفح.</footer>
+</div>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+<div class="sheet">
+<h2 id="modalTitle">إضافة مشترك</h2>
+<form id="form" onsubmit="saveCustomer(event)">
+<input type="hidden" id="editId">
+<div class="field"><label>اسم المشترك</label><input id="name" required placeholder="مثال: أحمد محمد"></div>
+<div class="field"><label>رقم الهاتف</label><input id="phone" required inputmode="tel" placeholder="07XXXXXXXXX"></div>
+<div class="field"><label>رقم الاشتراك</label><input id="subno" required placeholder="1025"></div>
+<div class="field"><label>الباقة</label><input id="plan" placeholder="10 ميغا"></div>
+<div class="field"><label>قيمة الاشتراك (د.ع)</label><input id="amount" type="number" required min="0" placeholder="25000"></div>
+<div class="field"><label>تاريخ الاستحقاق</label><input id="due" type="date" required></div>
+<div class="form-actions"><button type="button" class="secondary" onclick="closeModal()">إلغاء</button><button class="primary">حفظ المشترك</button></div>
+</form>
+</div>
+</div>
+
+<div id="payModal" class="modal" onclick="if(event.target===this)closePay()">
+<div class="sheet">
+<h2>تسجيل التسديد</h2>
+<p id="payInfo"></p>
+<div class="field"><label>المبلغ</label><input id="payAmount" type="number"></div>
+<div class="form-actions"><button type="button" class="secondary" onclick="closePay()">إلغاء</button><button class="primary" onclick="confirmPay()">✅ تأكيد التسديد</button></div>
+</div>
+</div>
+
+<script>
+const KEY="idar-al-burj-v1";
+let customers=JSON.parse(localStorage.getItem(KEY)||"[]");
+let payId=null;
+
+function save(){localStorage.setItem(KEY,JSON.stringify(customers));render()}
+function money(n){return Number(n||0).toLocaleString("ar-IQ")+" د.ع"}
+function today(){return new Date().toISOString().slice(0,10)}
+function status(c){return c.paidUntil && c.paidUntil>=today()}
+function render(list=customers,title="استحقاق اليوم"){
+ document.getElementById("total").textContent=customers.length;
+ document.getElementById("paidCount").textContent=customers.filter(status).length;
+ document.getElementById("dueCount").textContent=customers.filter(c=>!status(c)).length;
+ const month=new Date().toISOString().slice(0,7);
+ const income=customers.reduce((s,c)=>s+(c.payments||[]).filter(p=>p.date.slice(0,7)===month).reduce((x,p)=>x+Number(p.amount),0),0);
+ document.getElementById("income").textContent=money(income);
+ document.getElementById("listTitle").textContent=title;
+ const el=document.getElementById("list");
+ if(!list.length){el.innerHTML='<div class="empty">لا توجد بيانات حاليًا.</div>';return}
+ el.innerHTML=list.map(c=>`
+ <div class="row">
+   <div onclick="openCustomer('${c.id}')" style="flex:1">
+    <div class="name">${esc(c.name)}</div>
+    <div class="meta">${esc(c.phone)} • اشتراك ${esc(c.subno)} • ${money(c.amount)}</div>
+    <div class="meta">الاستحقاق: ${c.due||"غير محدد"}</div>
+   </div>
+   <div><span class="pill ${status(c)?"paid":"due"}">${status(c)?"مسدد":"متأخر"}</span></div>
+ </div>`).join("");
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function openAdd(){
+ document.getElementById("form").reset();document.getElementById("editId").value="";
+ document.getElementById("due").value=today();document.getElementById("modalTitle").textContent="إضافة مشترك";
+ document.getElementById("modal").classList.add("open");
+}
+function openCustomer(id){
+ const c=customers.find(x=>x.id===id); if(!c)return;
+ const payments=(c.payments||[]).slice().reverse().map(p=>`${p.date} — ${money(p.amount)}`).join("\n")||"لا توجد دفعات";
+ const ok=confirm(`${c.name}\nالهاتف: ${c.phone}\nالحالة: ${status(c)?"مسدد حتى "+c.paidUntil:"متأخر"}\n\nسجل التسديد:\n${payments}\n\nاضغط موافق لتسجيل تسديد، أو إلغاء للتعديل.`);
+ if(ok){payId=id;document.getElementById("payAmount").value=c.amount;document.getElementById("payInfo").textContent=`المشترك: ${c.name} — ${c.phone}`;document.getElementById("payModal").classList.add("open")}
+ else {editCustomer(c)}
+}
+function editCustomer(c){
+ document.getElementById("editId").value=c.id;
+ document.getElementById("name").value=c.name;
+ document.getElementById("phone").value=c.phone;
+ document.getElementById("subno").value=c.subno;
+ document.getElementById("plan").value=c.plan||"";
+ document.getElementById("amount").value=c.amount;
+ document.getElementById("due").value=c.due||today();
+ document.getElementById("modalTitle").textContent="تعديل المشترك";
+ document.getElementById("modal").classList.add("open");
+}
+function saveCustomer(e){
+ e.preventDefault();
+ const id=document.getElementById("editId").value;
+ const data={
+  name:document.getElementById("name").value.trim(),
+  phone:document.getElementById("phone").value.trim(),
+  subno:document.getElementById("subno").value.trim(),
+  plan:document.getElementById("plan").value.trim(),
+  amount:Number(document.getElementById("amount").value),
+  due:document.getElementById("due").value
+ };
+ if(id){
+  Object.assign(customers.find(c=>c.id===id),data);
+ } else {
+  const newId=(window.crypto && typeof window.crypto.randomUUID==="function")
+    ? window.crypto.randomUUID()
+    : Date.now().toString(36)+Math.random().toString(36).slice(2);
+  customers.push({...data,id:newId,payments:[],paidUntil:""});
+ }
+ save();
+ closeModal();
+}
+function confirmPay(){
+ const c=customers.find(x=>x.id===payId);if(!c)return;
+ const amt=Number(document.getElementById("payAmount").value||c.amount);
+ const d=new Date();d.setMonth(d.getMonth()+1);
+ c.paidUntil=d.toISOString().slice(0,10);
+ c.due=c.paidUntil;
+ c.payments=c.payments||[];c.payments.push({date:today(),amount:amt});
+ save();closePay();
+ alert(`تم تسجيل التسديد بنجاح.\n\nتم تجهيز رسالة التأكيد للمشترك ${c.name}.\n\nتم التسديد: ${money(amt)}\nفعال حتى: ${c.paidUntil}`);
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function closePay(){document.getElementById("payModal").classList.remove("open")}
+function showDue(){render(customers.filter(c=>!status(c)),"المتأخرون")}
+function showAll(){render(customers,"كل المشتركين")}
+function sendReminder(){const due=customers.filter(c=>!status(c));alert(due.length?`لديك ${due.length} مشترك/مشتركين متأخرين عن التسديد.`:"لا يوجد متأخرون حاليًا.")}
+render();
+</script>
+</body>
+</html>
