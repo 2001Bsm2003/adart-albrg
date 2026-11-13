@@ -159,7 +159,7 @@ function confirmPay(){
  c.payments=c.payments||[];c.payments.push({date:today(),amount:amt});
  save();closePay();
  alert(`تم تسجيل التسديد بنجاح.\n\nتم تجهيز رسالة التأكيد للمشترك ${c.name}.\n\nتم التسديد: ${money(amt)}\nفعال حتى: ${c.paidUntil}`);
-}
+} 
 function closeModal(){document.getElementById("modal").classList.remove("open")}
 function closePay(){document.getElementById("payModal").classList.remove("open")}
 function showDue(){render(customers.filter(c=>!status(c)),"المتأخرون")}
